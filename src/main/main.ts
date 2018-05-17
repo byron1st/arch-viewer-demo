@@ -1,10 +1,9 @@
-import { app, BrowserWindow, ipcMain, dialog, globalShortcut } from 'electron'
+import { app, BrowserWindow, globalShortcut } from 'electron'
 import * as path from 'path'
 import * as url from 'url'
-import { execFile } from 'child_process'
-import * as IPCType from '../IPCTypes'
+import * as http from 'http'
 import * as util from './util'
-import * as fs from 'fs'
+import { NewGraphTransmitChannel } from '../IPCTypes'
 
 // Declare global variables
 const CanvasIndexUrl = url.format({
@@ -12,7 +11,8 @@ const CanvasIndexUrl = url.format({
   protocol: 'file:',
   slashes: true
 })
-const GodepexplorerVersion = '0.1.0'
+
+const port = '3030'
 
 let canvasWindow: Electron.BrowserWindow
 
@@ -57,24 +57,24 @@ function initializeApp() {
       // @ts-ignore
     })
 
-    execFile('godepexplorer', ['-v'], (error, stdout) => {
-      if (error) {
-        return openNoGodepexplorerMessage()
-      }
+    const requestHandler = (request: http.IncomingMessage, response: http.ServerResponse) => {
+      let incomingData = ''
+      request.setEncoding('utf-8')
+      request.on('data', (data: any) => {
+        incomingData += data
+      })
+      request.on('end', () => {
+        const newGraph = JSON.parse(incomingData)
+        // TODO: send IPC
+        canvasWindow.webContents.send(NewGraphTransmitChannel, newGraph)
+        response.end()
+      })
+    }
 
-      const out = stdout.split(' ')
-      if (out.length !== 3) {
-        return openNoGodepexplorerMessage()
-      }
+    const server = http.createServer(requestHandler)
+    server.listen(port)
 
-      const version = out[2].trim()
-      if (version !== GodepexplorerVersion) {
-        return openNoGodepexplorerMessage()
-      }
-
-      // Only if there is godepexplorer installed,
-      createCanvasWindow()
-    })
+    createCanvasWindow()
   })
 
   app.on('window-all-closed', () => {
@@ -90,46 +90,5 @@ function initializeApp() {
   })
 }
 
-function openNoGodepexplorerMessage() {
-  dialog.showMessageBox(
-    {
-      message: 'There is no godepexplorer or wrong version.',
-      detail:
-        'You need to install 1) Go and 2) godepexplorer.\nAfter you install Go, you can get godepexplorer by running "go get github.com/byron1st/godepexplorer".\nThen, you should run "go install" on the project directory.',
-      type: 'error',
-      buttons: ['Quit']
-    },
-    () => {
-      app.quit()
-    }
-  )
-}
-
-function initializeIPC() {
-  ipcMain.on(IPCType.GetDepOfPkg.Request, sendRequestToGodepexplorer)
-}
-
-function sendRequestToGodepexplorer(event: any, pkgName: string) {
-  const depPath = path.join(app.getPath('appData'), app.getName(), 'dep.json')
-  fs.closeSync(fs.openSync(depPath, 'w'))
-
-  // supported algorithm is only static for now.
-  execFile(
-    'godepexplorer',
-    ['extract', pkgName, '--output', depPath],
-    (error, stdout, stderr) => {
-      if (error) {
-        dialog.showErrorBox('Error during executing godepexplorer', stderr)
-        event.sender.send(IPCType.GetDepOfPkg.Response)
-        return
-      }
-
-      const graph = JSON.parse(fs.readFileSync(depPath, 'utf-8'))
-      event.sender.send(IPCType.GetDepOfPkg.Response, graph)
-    }
-  )
-}
-
 // Running scripts
 initializeApp()
-initializeIPC()

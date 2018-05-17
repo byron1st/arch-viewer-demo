@@ -53,7 +53,6 @@ declare module 'godeptypes' {
       readonly infoPanelHeight: number
       readonly isNodeVisible: boolean
       readonly isEdgeVisible: boolean
-      readonly pkgImported: boolean
     }
 
     export interface IDataState {

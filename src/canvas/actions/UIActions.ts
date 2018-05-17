@@ -11,8 +11,7 @@ export const uiActions = {
     payload: newHeight
   })),
   changeNodeVisible: createAction('CHANGE_NODE_VISIBLE'),
-  changeEdgeVisible: createAction('CHANGE_EDGE_VISIBLE'),
-  togglePkgImported: createAction('TOGGLE_PKG_IMPORTED')
+  changeEdgeVisible: createAction('CHANGE_EDGE_VISIBLE')
 }
 
 const returnsOfActions = Object.values(uiActions).map(getReturnOfExpression)

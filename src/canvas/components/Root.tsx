@@ -3,7 +3,7 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { Graph, State } from 'godeptypes'
 import * as IPCType from '../../IPCTypes'
-import { uiActions, dataActions } from '../Actions'
+import { dataActions } from '../Actions'
 import DataSet from '../DataSet'
 import Canvas from './canvas/Canvas'
 import InfoPanel from './infoPanel/InfoPanel'
@@ -19,11 +19,10 @@ class Root extends React.Component<IRootProps> {
     super(props)
 
     ipcRenderer.on(
-      IPCType.GetDepOfPkg.Response,
+      IPCType.NewGraphTransmitChannel,
       (event: any, newGraph: Graph.IListGraph) => {
         if (newGraph) {
           this.props.initSideBarData(DataSet.init(newGraph))
-          this.props.togglePkgImported()
         }
       }
     )
@@ -44,8 +43,7 @@ function mapDispatchToProps(dispatch: any) {
   return {
     initSideBarData: (initSideBarState: State.ISideBarData) => {
       dispatch(dataActions.initSideBarData(initSideBarState))
-    },
-    togglePkgImported: () => dispatch(uiActions.togglePkgImported())
+    }
   }
 }
 
