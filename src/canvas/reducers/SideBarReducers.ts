@@ -4,7 +4,6 @@ import { State } from 'godeptypes'
 import { DataAction, dataActions } from '../Actions'
 import DataSet from '../DataSet'
 import VisNetwork from '../VisNetwork'
-import { PkgType } from '../enums'
 
 const INITIAL_STATE: State.ISideBarState = {
   data: {
@@ -24,10 +23,6 @@ export default (state = INITIAL_STATE, action: DataAction) => {
       }
     case getType(dataActions.showNode):
       VisNetwork.show(action.payload.id)
-
-      if (action.payload.type === PkgType.STD) {
-        return state
-      }
 
       return {
         data: {
