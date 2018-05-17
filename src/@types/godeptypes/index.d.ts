@@ -16,6 +16,7 @@ declare module 'godeptypes' {
       id: string
       from: string
       to: string
+      type: EdgeType
       arrows?: 'to' | 'from' | 'middle' | any // optional type that is not defined in vis.Edge, but actually can be used.
       color?: any // http://visjs.org/docs/network/edges.html
       meta: IEdgeMeta
@@ -23,7 +24,7 @@ declare module 'godeptypes' {
 
     export type NodeType = 'cps' | 'comp'
 
-    export type EdgeType = 0 | 1
+    export type EdgeType = 'http' | 'local'
 
     interface INodeMeta {
       [key: string]: string | { [id: string]: boolean }
@@ -35,20 +36,9 @@ declare module 'godeptypes' {
     }
 
     interface IEdgeMeta {
-      [key: string]: number | { [id: string]: IDepAtFunc }
-      type: EdgeType
-      depAtFuncSet: { [id: string]: IDepAtFunc }
-    }
-
-    interface IDepAtFunc {
-      id: string
-      from: IFunc
-      to: IFunc
-    }
-
-    interface IFunc {
-      signature: string
-      filename: string
+      [key: string]: string
+      dataType: string
+      information: string
     }
   }
 

@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Graph } from 'godeptypes'
 import * as _ from 'lodash'
-import { remote } from 'electron'
 import DataSet from '../../../DataSet'
 
 const keyLabelMap: { [key: string]: string } = {
@@ -14,10 +13,9 @@ const keyLabelMap: { [key: string]: string } = {
   sinkEdgeIDSet: 'Required (from)',
   sourceEdgeIDSet: 'Provided (to)',
 
-  count: 'Count',
-  depAtFuncSet: 'Function-level',
   from: 'Source(from)',
   to: 'Sink(to)',
+  dataType: 'Data Type'
 }
 
 const edgeType = ['Composition', 'Import-Relation']
@@ -132,64 +130,23 @@ function getEdgeMetaElements(edge: Graph.IEdge) {
     getRow('to', getNodeLabel(edge.to), 1, getRowKey(edge.id, 'to')),
     getRow(
       'type',
-      edgeType[Number(edge.meta.type)],
+      edgeType[Number(edge.type)],
       2,
       getRowKey(edge.id, 'type')
     ),
     getRow(
-      'depAtFuncSet',
-      <ul>{getDepAtFunc(edge.meta.depAtFuncSet, edge.id)}</ul>,
+      'dataType',
+      edgeType[Number(edge.meta.dataType)],
       3,
-      getRowKey(edge.id, 'depAtFuncSet')
-    )
+      getRowKey(edge.id, 'dataType')
+    ),
+    getRow(
+      'information',
+      edgeType[Number(edge.meta.information)],
+      4,
+      getRowKey(edge.id, 'information')
+    ),
   ]
-}
-
-function getDepAtFunc(
-  depAtFuncSet: { [id: string]: Graph.IDepAtFunc },
-  edgeID: string
-) {
-  const getDepAtFuncRow = (depAtFunc: Graph.IDepAtFunc) => {
-    const openFromFile = () => {
-      remote.shell.openItem(depAtFunc.from.filename)
-    }
-
-    const openToFile = () => {
-      remote.shell.openItem(depAtFunc.to.filename)
-    }
-
-    return (
-      <li key={edgeID + depAtFunc.id}>
-        <span
-          data-toggle="tooltip"
-          data-placement="top"
-          title={depAtFunc.from.filename}
-        >
-          <a href="#" onClick={openFromFile}>
-            {getShortFilename(depAtFunc.from.filename)}
-          </a>
-        </span>
-        {`::${depAtFunc.from.signature} => `}
-        <span
-          data-toggle="tooltip"
-          data-placement="top"
-          title={depAtFunc.to.filename}
-        >
-          <a href="#" onClick={openToFile}>
-            {getShortFilename(depAtFunc.to.filename)}
-          </a>
-        </span>
-        {`::${depAtFunc.to.signature}`}
-      </li>
-    )
-  }
-
-  return _.values(depAtFuncSet).map(getDepAtFuncRow)
-}
-
-function getShortFilename(filename: string) {
-  const splitted = _.split(filename, '/')
-  return splitted[splitted.length - 1]
 }
 
 function getRow(key: string, value: any, index: number, reactKey: string) {

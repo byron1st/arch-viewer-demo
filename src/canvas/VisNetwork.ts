@@ -111,16 +111,10 @@ class VisNetwork {
 }
 
 function styleEdge(edge: Graph.IEdge) {
-  if (edge.meta.type === EdgeType.COMP) {
-    edge.color = { color: '#292D34' }
-    edge.arrows = {
-      from: {
-        enabled: true,
-        type: 'circle',
-        scaleFactor: 0.5
-      }
-    }
-  } else if (edge.meta.type === EdgeType.REL) {
+  if (edge.type === EdgeType.LOCAL) {
+    edge.color = { color: '#FF7035' }
+    edge.arrows = 'to'
+  } else if (edge.type === EdgeType.HTTP) {
     edge.arrows = 'to'
   }
 
