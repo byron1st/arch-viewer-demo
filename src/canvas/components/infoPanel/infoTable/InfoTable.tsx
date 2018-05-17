@@ -73,7 +73,7 @@ function getNodeMetaElements(node: Graph.INode) {
     getRow('type', node.type, 0, getRowKey(node.id, 'type')),
     getRow(
       'host',
-      keyLabelMap[node.meta.host],
+      node.meta.host,
       1,
       getRowKey(node.id, 'host')
     ),
@@ -130,19 +130,19 @@ function getEdgeMetaElements(edge: Graph.IEdge) {
     getRow('to', getNodeLabel(edge.to), 1, getRowKey(edge.id, 'to')),
     getRow(
       'type',
-      edgeType[Number(edge.type)],
+      edge.type,
       2,
       getRowKey(edge.id, 'type')
     ),
     getRow(
       'dataType',
-      edgeType[Number(edge.meta.dataType)],
+      edge.meta.dataType,
       3,
       getRowKey(edge.id, 'dataType')
     ),
     getRow(
       'information',
-      edgeType[Number(edge.meta.information)],
+      edge.meta.information,
       4,
       getRowKey(edge.id, 'information')
     ),
