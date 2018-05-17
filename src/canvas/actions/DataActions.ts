@@ -1,6 +1,6 @@
 import { createAction } from 'typesafe-actions'
 import { getReturnOfExpression } from 'utility-types'
-import { State, Graph } from 'godeptypes'
+import { State } from 'godeptypes'
 
 export const dataActions = {
   initSideBarData: createAction(
@@ -26,11 +26,6 @@ export const dataActions = {
     type: 'DESELECT',
     payload: deselected
   })),
-  expand: createAction('EXPAND', (nodeID: string) => ({
-    type: 'EXPAND',
-    payload: nodeID
-  })),
-  toggleIgnoreStd: createAction('TOGGLE_IGNORE_STD'),
   showInfo: createAction(
     'SHOW_INFO',
     (infoPanelData: State.ISelectedState) => ({

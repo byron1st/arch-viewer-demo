@@ -7,11 +7,9 @@ import { uiActions, dataActions } from '../Actions'
 import DataSet from '../DataSet'
 import Canvas from './canvas/Canvas'
 import InfoPanel from './infoPanel/InfoPanel'
-import MenuBar from './menuBar/MenuBar'
 import SideBar from './sideBar/SideBar'
 
 interface IRootProps {
-  turnOffLoadingIndicator: () => any
   initSideBarData: (initSideBarState: State.ISideBarData) => any
   togglePkgImported: () => any
 }
@@ -23,8 +21,6 @@ class Root extends React.Component<IRootProps> {
     ipcRenderer.on(
       IPCType.GetDepOfPkg.Response,
       (event: any, newGraph: Graph.IListGraph) => {
-        this.props.turnOffLoadingIndicator()
-
         if (newGraph) {
           this.props.initSideBarData(DataSet.init(newGraph))
           this.props.togglePkgImported()
@@ -37,7 +33,6 @@ class Root extends React.Component<IRootProps> {
     return (
       <div style={{ width: 'inherit', height: 'inherit' }}>
         <SideBar />
-        <MenuBar appTitle="GoDepExplorer UI" />
         <InfoPanel />
         <Canvas />
       </div>
@@ -47,8 +42,6 @@ class Root extends React.Component<IRootProps> {
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    turnOffLoadingIndicator: () =>
-      dispatch(uiActions.turnOffLoadingIndicator()),
     initSideBarData: (initSideBarState: State.ISideBarData) => {
       dispatch(dataActions.initSideBarData(initSideBarState))
     },

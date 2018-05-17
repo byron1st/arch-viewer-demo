@@ -182,13 +182,6 @@ function openContextMenu() {
         )
       }
     })
-
-    menuTemplate.unshift({
-      label: 'expand',
-      click() {
-        Store.dispatch(dataActions.expand(hovered.ID))
-      }
-    })
   }
 
   const menu = remote.Menu.buildFromTemplate(menuTemplate)

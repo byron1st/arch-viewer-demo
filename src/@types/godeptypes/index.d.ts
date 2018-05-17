@@ -67,8 +67,6 @@ declare module 'godeptypes' {
       readonly infoPanelHeight: number
       readonly isNodeVisible: boolean
       readonly isEdgeVisible: boolean
-      readonly loadingPath: string
-      readonly isLoading: boolean
       readonly pkgImported: boolean
     }
 
@@ -89,24 +87,12 @@ declare module 'godeptypes' {
 
     // key values are matched with PkgType.
     export interface ISideBarState {
-      readonly ignoreStd: boolean
       readonly data: ISideBarData
     }
 
     export interface ISideBarDataSet {
       readonly visibleList: string[]
       readonly invisibleList: string[]
-    }
-  }
-
-  namespace Network {
-    export interface IRequest {
-      pkgName: string
-    }
-
-    export interface IResponse {
-      pkgName: string
-      graph: Graph.IListGraph
     }
   }
 

@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { State } from 'godeptypes'
 import { uiActions } from '../../Actions'
 import SideBarList from './SideBarList'
-import ViewConfig from './ViewConfig'
 
 interface ISideBarProps {
   width: number
@@ -40,9 +39,6 @@ class SideBar extends React.Component<ISideBarProps> {
         maxWidth={800}
       >
         <div style={{ ...style.ContentContainer, overflow: 'auto' }}>
-          {/* TODO: vpViewConfig */}
-          <ViewConfig />
-          {/* ************ */}
           <SideBarList
             header="Normal packages"
             visibleList={this.props.sideBarData.data.nor.visibleList}
