@@ -8,7 +8,7 @@ declare module 'godeptypes' {
     export interface INode extends vis.Node {
       id: string
       label: string
-      type: string
+      type: NodeType
       meta: INodeMeta
     }
 
@@ -21,21 +21,17 @@ declare module 'godeptypes' {
       meta: IEdgeMeta
     }
 
-    export type PkgType = 'nor' | 'ext' | 'std'
+    export type NodeType = 'cps' | 'comp'
 
     export type EdgeType = 0 | 1
 
     interface INodeMeta {
-      [key: string]: string | PkgType | { [id: string]: boolean }
-      pkgPath: string
-      pkgName: string
-      pkgDir: string
-      pkgType: PkgType
+      [key: string]: string | { [id: string]: boolean }
+      host: string
+      location: string
+      information: string
       sinkEdgeIDSet: { [id: string]: boolean }
       sourceEdgeIDSet: { [id: string]: boolean }
-      parent: string
-      children: { [id: string]: boolean }
-      // TODO: funcSet
     }
 
     interface IEdgeMeta {
@@ -83,6 +79,8 @@ declare module 'godeptypes' {
 
     export interface ISideBarData {
       readonly [type: string]: ISideBarDataSet
+      readonly cps: ISideBarDataSet
+      readonly comp: ISideBarDataSet
     }
 
     // key values are matched with PkgType.

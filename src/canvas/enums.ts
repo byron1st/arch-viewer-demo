@@ -8,3 +8,8 @@ export enum PkgType {
   EXT = 'ext',
   STD = 'std'
 }
+
+export enum NodeType {
+  CPS = 'cps',
+  COMP = 'comp'
+}

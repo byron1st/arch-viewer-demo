@@ -15,8 +15,8 @@ interface ISideBarListItemProps {
   selected: State.ISelectedState
   select: (selected: State.ISelectedState) => any
   deselect: (deselected: State.ISelectedState) => any
-  showNode: (id: string, type: string) => any
-  hideNode: (id: string, type: string) => any
+  showNode: (id: string, type: Graph.NodeType) => any
+  hideNode: (id: string, type: Graph.NodeType) => any
   showInfo: (infoPanelData: State.ISelectedState) => any
 }
 
@@ -96,13 +96,11 @@ class SideBarListItem extends React.Component<ISideBarListItemProps> {
 
   private getMenuTemplate(
     id: string,
-    showNode: (id: string, type: string) => any,
-    hideNode: (id: string, type: string) => any,
+    showNode: (id: string, type: Graph.NodeType) => any,
+    hideNode: (id: string, type: Graph.NodeType) => any,
     showInfo: (infoPanelData: State.ISelectedState) => any
   ) {
     const selectedNodeList = this.props.selected.nodeList
-    // TODO: meta.pkgType 부분.
-    // pkgType을 base로 쓸 거면, meta가 아니라 상위에 존재할 필요 있음.
     return [
       {
         label: 'Show',
@@ -171,10 +169,10 @@ function mapDispatchToProps(dispatch: any) {
     deselect: (deselected: State.ISelectedState) => {
       dispatch(dataActions.deselect(deselected))
     },
-    showNode: (id: string, type: string) => {
+    showNode: (id: string, type: Graph.NodeType) => {
       dispatch(dataActions.showNode(id, type))
     },
-    hideNode: (id: string, type: string) => {
+    hideNode: (id: string, type: Graph.NodeType) => {
       dispatch(dataActions.hideNode(id, type))
     },
     showInfo: (infoPanelData: State.ISelectedState) => {

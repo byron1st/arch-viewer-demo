@@ -5,24 +5,19 @@ import { remote } from 'electron'
 import DataSet from '../../../DataSet'
 
 const keyLabelMap: { [key: string]: string } = {
+  id: 'ID',
+  label: 'Label',
+  type: 'Type',
+  host: 'Host',
+  location: 'Physical location',
+  information: 'Information',
+  sinkEdgeIDSet: 'Required (from)',
+  sourceEdgeIDSet: 'Provided (to)',
+
   count: 'Count',
   depAtFuncSet: 'Function-level',
   from: 'Source(from)',
-  id: 'ID',
-  label: 'Label',
-  pkgDir: 'Package Directory',
-  pkgName: 'Package Name',
-  pkgPath: 'Package Path',
-  pkgType: 'Package Type',
   to: 'Sink(to)',
-  type: 'Type',
-  children: 'Sub-packages',
-  parent: 'Parent-package',
-  nor: 'Normal',
-  ext: 'External',
-  std: 'Standard',
-  sinkEdgeIDSet: 'In-relation (from)',
-  sourceEdgeIDSet: 'Out-relation (to)'
 }
 
 const edgeType = ['Composition', 'Import-Relation']
@@ -49,7 +44,7 @@ function getNodeElements(elementList: Graph.INode[]) {
     <div className="card m-3" key={node.id}>
       <div className="card-body">
         <h4 className="card-title">{node.label}</h4>
-        <h6 className="card-subtitle text-muted">{node.meta.pkgPath}</h6>
+        <h6 className="card-subtitle text-muted">{node.id}</h6>
         <div className="card-text container-fluid">
           {getNodeMetaElements(node)}
         </div>
@@ -77,19 +72,19 @@ function getEdgeElements(elementList: Graph.IEdge[]) {
 
 function getNodeMetaElements(node: Graph.INode) {
   return [
-    getRow('id', node.id, 0, getRowKey(node.id, 'ID')),
+    getRow('type', node.type, 0, getRowKey(node.id, 'type')),
     getRow(
-      'pkgType',
-      keyLabelMap[node.meta.pkgType],
+      'host',
+      keyLabelMap[node.meta.host],
       1,
-      getRowKey(node.id, 'PkgType')
+      getRowKey(node.id, 'host')
     ),
-    getRow('parent', node.meta.parent, 2, getRowKey(node.id, 'parent')),
+    getRow('location', node.meta.location, 2, getRowKey(node.id, 'location')),
     getRow(
-      'children',
-      <ul>{getChildrenRow(node.meta.children, node.id)}</ul>,
+      'information',
+      node.meta.information,
       3,
-      getRowKey(node.id, 'children')
+      getRowKey(node.id, 'information')
     ),
     getRow(
       'sourceEdgeIDSet',
@@ -104,20 +99,8 @@ function getNodeMetaElements(node: Graph.INode) {
       <ul>{getSinkSourceEdgeRow(node.meta.sinkEdgeIDSet, node.id, true)}</ul>,
       5,
       getRowKey(node.id, 'sinkEdgeIDSet')
-    ),
-    getRow('pkgDir', node.meta.pkgDir, 6, getRowKey(node.id, 'pkgDir'))
+    )
   ]
-}
-
-function getChildrenRow(children: { [id: string]: boolean }, nodeID: string) {
-  const getPkgPath = (id: string) => DataSet.getNode(id).meta.pkgPath
-  const getChildRow = (pkgPath: string) => (
-    <li key={nodeID + pkgPath}>{pkgPath}</li>
-  )
-  return _.keys(children)
-    .map(getPkgPath)
-    .sort()
-    .map(getChildRow)
 }
 
 function getSinkSourceEdgeRow(
@@ -127,14 +110,14 @@ function getSinkSourceEdgeRow(
 ) {
   const getEdge = (id: string) => DataSet.getEdge(id)
   const sortEdgeBySource = (prev: Graph.IEdge, next: Graph.IEdge) =>
-    getNodePkgPath(prev.from) <= getNodePkgPath(next.from) ? -1 : 1
+    getNodeLabel(prev.from) <= getNodeLabel(next.from) ? -1 : 1
   const getEdgeRowKey = (sourceID: string, sinkID: string) =>
     nodeID + sourceID + sinkID
   const getSinkEdgeRow = (edge: Graph.IEdge) => (
-    <li key={getEdgeRowKey(edge.from, edge.to)}>{getNodePkgPath(edge.from)}</li>
+    <li key={getEdgeRowKey(edge.from, edge.to)}>{getNodeLabel(edge.from)}</li>
   )
   const getSourceEdgeRow = (edge: Graph.IEdge) => (
-    <li key={getEdgeRowKey(edge.from, edge.to)}>{getNodePkgPath(edge.to)}</li>
+    <li key={getEdgeRowKey(edge.from, edge.to)}>{getNodeLabel(edge.to)}</li>
   )
 
   return _.keys(edgeIDSet)
@@ -145,8 +128,8 @@ function getSinkSourceEdgeRow(
 
 function getEdgeMetaElements(edge: Graph.IEdge) {
   return [
-    getRow('from', getNodePkgPath(edge.from), 0, getRowKey(edge.id, 'from')),
-    getRow('to', getNodePkgPath(edge.to), 1, getRowKey(edge.id, 'to')),
+    getRow('from', getNodeLabel(edge.from), 0, getRowKey(edge.id, 'from')),
+    getRow('to', getNodeLabel(edge.to), 1, getRowKey(edge.id, 'to')),
     getRow(
       'type',
       edgeType[Number(edge.meta.type)],
@@ -238,6 +221,6 @@ function getRowKey(id: string, key: string) {
   return id + key
 }
 
-function getNodePkgPath(id: string) {
-  return DataSet.getNode(id).meta.pkgPath
+function getNodeLabel(id: string) {
+  return DataSet.getNode(id).label
 }

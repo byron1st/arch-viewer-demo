@@ -1,6 +1,6 @@
 import { createAction } from 'typesafe-actions'
 import { getReturnOfExpression } from 'utility-types'
-import { State } from 'godeptypes'
+import { State, Graph } from 'godeptypes'
 
 export const dataActions = {
   initSideBarData: createAction(
@@ -10,11 +10,11 @@ export const dataActions = {
       payload: initSideBarState
     })
   ),
-  showNode: createAction('SHOW_NODE', (id: string, type: string) => ({
+  showNode: createAction('SHOW_NODE', (id: string, type: Graph.NodeType) => ({
     type: 'SHOW_NODE',
     payload: { id, type }
   })),
-  hideNode: createAction('HIDE_NODE', (id: string, type: string) => ({
+  hideNode: createAction('HIDE_NODE', (id: string, type: Graph.NodeType) => ({
     type: 'HIDE_NODE',
     payload: { id, type }
   })),

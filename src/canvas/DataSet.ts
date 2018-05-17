@@ -1,16 +1,12 @@
 import { IGraphDataSet, Graph, State } from 'godeptypes'
-import { PkgType } from './enums'
+import { NodeType } from './enums'
 
 const INITIAL_SIDEBARDATA: State.ISideBarData = {
-  nor: {
+  cps: {
     visibleList: [],
     invisibleList: []
   },
-  ext: {
-    visibleList: [],
-    invisibleList: []
-  },
-  std: {
+  comp: {
     visibleList: [],
     invisibleList: []
   }
@@ -24,14 +20,13 @@ class DataSet {
 
     graph.nodes.forEach(node => {
       this.dataSet.nodeSet[node.id] = node
-      dispatchIDToList(sideBarState, node.meta.pkgType, node.id)
+      dispatchIDToList(sideBarState, node.type, node.id)
     })
 
     graph.edges.forEach(edge => (this.dataSet.edgeSet[edge.id] = edge))
 
-    sideBarState.nor.visibleList.sort(this.sortByPkgPath.bind(this))
-    sideBarState.ext.invisibleList.sort(this.sortByPkgPath.bind(this))
-    sideBarState.std.invisibleList.sort(this.sortByPkgPath.bind(this))
+    sideBarState.cps.visibleList.sort(this.sortByLabel.bind(this))
+    sideBarState.comp.visibleList.sort(this.sortByLabel.bind(this))
 
     return sideBarState
   }
@@ -65,10 +60,10 @@ class DataSet {
     return { nodeList, edgeList }
   }
 
-  private sortByPkgPath(prev: string, next: string) {
+  private sortByLabel(prev: string, next: string) {
     if (
-      this.dataSet.nodeSet[prev].meta.pkgPath <=
-      this.dataSet.nodeSet[next].meta.pkgPath
+      this.dataSet.nodeSet[prev].label <=
+      this.dataSet.nodeSet[next].label
     ) {
       return -1
     } else {
@@ -79,18 +74,15 @@ class DataSet {
 
 function dispatchIDToList(
   sideBarState: State.ISideBarData,
-  pkgType: Graph.PkgType,
+  type: Graph.NodeType,
   id: string
 ) {
-  switch (pkgType) {
-    case PkgType.NOR:
-      sideBarState.nor.visibleList.push(id)
+  switch (type) {
+    case NodeType.CPS:
+      sideBarState.cps.visibleList.push(id)
       break
-    case PkgType.EXT:
-      sideBarState.ext.invisibleList.push(id)
-      break
-    case PkgType.STD:
-      sideBarState.std.invisibleList.push(id)
+    case NodeType.COMP:
+      sideBarState.comp.invisibleList.push(id)
       break
   }
 }

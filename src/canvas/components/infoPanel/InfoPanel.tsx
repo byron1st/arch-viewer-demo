@@ -56,14 +56,14 @@ class InfoPanel extends React.Component<IInfoPanelProps> {
         <div style={style.ContentContainer}>
           <InfoTableContainer
             elementList={nodeList}
-            header="Nodes"
+            header="Components"
             isVisible={this.props.isNodeVisible}
             isNode={true}
             changeVisibility={this.props.changeNodeVisible}
           />
           <InfoTableContainer
             elementList={edgeList}
-            header="Edges"
+            header="Connectors"
             isVisible={this.props.isEdgeVisible}
             isNode={false}
             changeVisibility={this.props.changeEdgeVisible}

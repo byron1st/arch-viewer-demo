@@ -23,14 +23,11 @@ const NETWORK_OPTS: vis.Options = {
     size: 10
   },
   groups: {
-    nor: {
+    cps: {
       color: '#5CC9F5'
     },
-    std: {
+    comp: {
       color: '#A1A9B8'
-    },
-    ext: {
-      color: '#292D34'
     }
   },
   layout: {
@@ -81,7 +78,7 @@ class VisNetwork {
 
     this.nodes.update(
       dataList.nodeList.map(node => {
-        node.group = node.meta.pkgType
+        node.group = node.type
         return node
       })
     )
@@ -177,7 +174,7 @@ function openContextMenu() {
         Store.dispatch(
           dataActions.hideNode(
             hovered.ID,
-            DataSet.getNode(hovered.ID).meta.pkgType
+            DataSet.getNode(hovered.ID).type
           )
         )
       }

@@ -8,9 +8,8 @@ import { PkgType } from '../enums'
 
 const INITIAL_STATE: State.ISideBarState = {
   data: {
-    nor: { visibleList: [], invisibleList: [] },
-    ext: { visibleList: [], invisibleList: [] },
-    std: { visibleList: [], invisibleList: [] }
+    cps: { visibleList: [], invisibleList: [] },
+    comp: { visibleList: [], invisibleList: [] }
   }
 }
 
@@ -59,33 +58,32 @@ export default (state = INITIAL_STATE, action: DataAction) => {
 function hide(dataSet: State.ISideBarDataSet, id: string) {
   return {
     visibleList: _.without(dataSet.visibleList, id),
-    invisibleList: _.union(dataSet.invisibleList, [id]).sort(sortByPkgPath)
+    invisibleList: _.union(dataSet.invisibleList, [id]).sort(sortByLabel)
   }
 }
 
 function show(dataSet: State.ISideBarDataSet, id: string | string[]) {
   return Array.isArray(id)
     ? {
-        visibleList: _.union(dataSet.visibleList, id).sort(sortByPkgPath),
+        visibleList: _.union(dataSet.visibleList, id).sort(sortByLabel),
         invisibleList: _.difference(dataSet.invisibleList, id)
       }
     : {
-        visibleList: _.union(dataSet.visibleList, [id]).sort(sortByPkgPath),
+        visibleList: _.union(dataSet.visibleList, [id]).sort(sortByLabel),
         invisibleList: _.without(dataSet.invisibleList, id)
       }
 }
 
 function getVisibleList(dataSet: State.ISideBarData) {
   return _.concat(
-    dataSet.nor.visibleList,
-    dataSet.ext.visibleList,
-    dataSet.std.visibleList
+    dataSet.cps.visibleList,
+    dataSet.comp.visibleList
   )
 }
 
-function sortByPkgPath(prev: string, next: string) {
+function sortByLabel(prev: string, next: string) {
   if (
-    DataSet.getNode(prev).meta.pkgPath <= DataSet.getNode(next).meta.pkgPath
+    DataSet.getNode(prev).label <= DataSet.getNode(next).label
   ) {
     return -1
   } else {

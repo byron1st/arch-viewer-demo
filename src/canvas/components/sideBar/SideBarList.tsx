@@ -11,7 +11,6 @@ interface ISideBarListProps {
 export default (props: ISideBarListProps) => (
   <div style={style.container}>
     <h4>{props.header}</h4>
-    {/* TODO: Visibile, Invisible. 이건 공통 요소로 놔둬도 될듯? */}
     <h6>Visible Nodes</h6>
     {props.visibleList.map((id, index, visibleList) => (
       <SideBarListItem
