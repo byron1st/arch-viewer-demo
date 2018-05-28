@@ -11,7 +11,6 @@ import SideBar from './sideBar/SideBar'
 
 interface IRootProps {
   initSideBarData: (initSideBarState: State.ISideBarData) => any
-  togglePkgImported: () => any
 }
 
 class Root extends React.Component<IRootProps> {
