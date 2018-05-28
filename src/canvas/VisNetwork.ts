@@ -43,6 +43,11 @@ const NETWORK_OPTS: vis.Options = {
     hover: true,
     hoverConnectedEdges: false
   },
+  physics: {
+    stabilization: {
+      enabled: true
+    }
+  }
 }
 
 let hovered: IHoveredElement
