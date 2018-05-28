@@ -31,19 +31,18 @@ const NETWORK_OPTS: vis.Options = {
     }
   },
   layout: {
-    // randomSeed: 1,
-    // improvedLayout: true
-    hierarchical: true
+    randomSeed: 2,
+    improvedLayout: true,
+    hierarchical: {
+      direction: 'LR',
+      sortMethod: 'directed'
+    }
   },
   interaction: {
     multiselect: true,
     hover: true,
     hoverConnectedEdges: false
   },
-  physics: {
-    stabilization: true,
-    solver: 'forceAtlas2Based'
-  }
 }
 
 let hovered: IHoveredElement
