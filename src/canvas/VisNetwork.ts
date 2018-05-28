@@ -180,10 +180,7 @@ function openContextMenu() {
       label: 'hide',
       click() {
         Store.dispatch(
-          dataActions.hideNode(
-            hovered.ID,
-            DataSet.getNode(hovered.ID).type
-          )
+          dataActions.hideNode(hovered.ID, DataSet.getNode(hovered.ID).type)
         )
       }
     })
