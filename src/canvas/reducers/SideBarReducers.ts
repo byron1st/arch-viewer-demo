@@ -15,7 +15,7 @@ const INITIAL_STATE: State.ISideBarState = {
 export default (state = INITIAL_STATE, action: DataAction) => {
   switch (action.type) {
     case getType(dataActions.initSideBarData):
-      VisNetwork.show(getVisibleList(action.payload))
+      VisNetwork.refresh(getVisibleList(action.payload))
 
       return {
         ...INITIAL_STATE,

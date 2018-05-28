@@ -1,22 +1,20 @@
 import { IGraphDataSet, Graph, State } from 'godeptypes'
 import { NodeType } from './enums'
 
-const INITIAL_SIDEBARDATA: State.ISideBarData = {
-  cps: {
-    visibleList: [],
-    invisibleList: []
-  },
-  comp: {
-    visibleList: [],
-    invisibleList: []
-  }
-}
-
 class DataSet {
   private dataSet: IGraphDataSet = { nodeSet: {}, edgeSet: {} }
 
   public init(graph: Graph.IListGraph) {
-    const sideBarState: State.ISideBarData = INITIAL_SIDEBARDATA
+    const sideBarState: State.ISideBarData = {
+      cps: {
+        visibleList: [],
+        invisibleList: []
+      },
+      comp: {
+        visibleList: [],
+        invisibleList: []
+      }
+    }
 
     graph.nodes.forEach(node => {
       this.dataSet.nodeSet[node.id] = node
@@ -61,10 +59,7 @@ class DataSet {
   }
 
   private sortByLabel(prev: string, next: string) {
-    if (
-      this.dataSet.nodeSet[prev].label <=
-      this.dataSet.nodeSet[next].label
-    ) {
+    if (this.dataSet.nodeSet[prev].label <= this.dataSet.nodeSet[next].label) {
       return -1
     } else {
       return 1
@@ -73,16 +68,16 @@ class DataSet {
 }
 
 function dispatchIDToList(
-  sideBarState: State.ISideBarData,
+  sideBarStateData: State.ISideBarData,
   type: Graph.NodeType,
   id: string
 ) {
   switch (type) {
     case NodeType.CPS:
-      sideBarState.cps.visibleList.push(id)
+      sideBarStateData.cps.visibleList.push(id)
       break
     case NodeType.COMP:
-      sideBarState.comp.visibleList.push(id)
+      sideBarStateData.comp.visibleList.push(id)
       break
   }
 }

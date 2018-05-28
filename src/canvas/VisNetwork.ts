@@ -69,6 +69,15 @@ class VisNetwork {
     this.visNetwork.on('release', recordReleaseParams)
   }
 
+  public refresh(idList: string[]) {
+    // @ts-ignore nodeID is always string in this system.
+    const currentVisibleNodeIDList: string[] = this.nodes.getIds()
+    const removedIDList = _.difference(currentVisibleNodeIDList, idList)
+
+    this.show(idList)
+    this.hide(removedIDList)
+  }
+
   public show(id: string | string[]) {
     // @ts-ignore nodeID is always string in this system.
     const currentVisibleNodeIDList: string[] = this.nodes.getIds()
