@@ -82,7 +82,7 @@ function dispatchIDToList(
       sideBarState.cps.visibleList.push(id)
       break
     case NodeType.COMP:
-      sideBarState.comp.invisibleList.push(id)
+      sideBarState.comp.visibleList.push(id)
       break
   }
 }
