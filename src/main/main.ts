@@ -4,6 +4,8 @@ import * as url from 'url'
 import * as http from 'http'
 import * as util from './util'
 import { NewGraphTransmitChannel } from '../IPCTypes'
+import { ICommand } from 'godeptypes'
+import initGraph from './initGraph'
 
 // Declare global variables
 const CanvasIndexUrl = url.format({
@@ -57,16 +59,33 @@ function initializeApp() {
       // @ts-ignore
     })
 
-    const requestHandler = (request: http.IncomingMessage, response: http.ServerResponse) => {
+    const requestHandler = (
+      request: http.IncomingMessage,
+      response: http.ServerResponse
+    ) => {
       let incomingData = ''
       request.setEncoding('utf-8')
       request.on('data', (data: any) => {
         incomingData += data
       })
       request.on('end', () => {
-        const newGraph = JSON.parse(incomingData)
-        // TODO: send IPC
-        canvasWindow.webContents.send(NewGraphTransmitChannel, newGraph)
+        // const newGraph = JSON.parse(incomingData)
+        // canvasWindow.webContents.send(NewGraphTransmitChannel, newGraph)
+
+        const command: ICommand = JSON.parse(incomingData)
+        if (command.cmd) {
+          switch (command.cmd) {
+            case 'start':
+              handleStart()
+              break
+            case 'error':
+              handleError(command.arg)
+              break
+            default:
+              break
+          }
+        }
+
         response.end()
       })
     }
@@ -88,6 +107,15 @@ function initializeApp() {
       createCanvasWindow()
     }
   })
+}
+
+function handleStart() {
+  const initGraphData = initGraph
+  canvasWindow.webContents.send(NewGraphTransmitChannel, initGraphData)
+}
+
+function handleError(arg: any) {
+
 }
 
 // Running scripts

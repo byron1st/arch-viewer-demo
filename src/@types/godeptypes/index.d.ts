@@ -91,4 +91,9 @@ declare module 'godeptypes' {
     nodeSet: IElementSet<Graph.INode>
     edgeSet: IElementSet<Graph.IEdge>
   }
+
+  export interface ICommand {
+    cmd: string
+    arg: any
+  }
 }

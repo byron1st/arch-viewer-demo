@@ -1,0 +1,171 @@
+export default {
+  "nodes": [
+    {
+      "id": "arch-manager",
+      "label": "Architecture Manager",
+      "type": "comp",
+      "meta": {
+        "host": "123.123.123.123",
+        "location": "V2X Machine",
+        "information": "A SW Component to manage the architecture of V2X SW",
+        "sinkEdgeIDSet": {},
+        "sourceEdgeIDSet": {
+          "cps-arch-manager-conn": true,
+          "cps-arch-manager-to-v2x-conn": true
+        }
+      }
+    },
+    {
+      "id": "cps-service-manager",
+      "label": "CPS Service Manager",
+      "type": "comp",
+      "meta": {
+        "host": "123.123.123.124",
+        "location": "V2X Machine",
+        "information": "A SW Component to manage various CPS services",
+        "sinkEdgeIDSet": {
+          "cps-arch-manager-conn": true
+        },
+        "sourceEdgeIDSet": {
+          "cps-service-manager-conn": true
+        }
+      }
+    },
+    {
+      "id": "cps-service-registry",
+      "label": "CPS Service Registry",
+      "type": "comp",
+      "meta": {
+        "host": "123.123.123.125",
+        "location": "V2X Machine",
+        "information": "A database, which contains various CPS services",
+        "sinkEdgeIDSet": {
+          "cps-service-manager-conn": true
+        },
+        "sourceEdgeIDSet": {}
+      }
+    },
+    {
+      "id": "v2x-business-logic-component",
+      "label": "V2X Business Logic Component",
+      "type": "comp",
+      "meta": {
+        "host": "123.123.123.126",
+        "location": "V2X Machine",
+        "information": "A main SW component, which operates the V2X machine",
+        "sinkEdgeIDSet": {
+          "cps-arch-manager-to-v2x-conn": true
+        },
+        "sourceEdgeIDSet": {
+          "cps-service-connector01": true,
+          "cps-service-connector02": true,
+          "cps-service-connector03": true
+        }
+      }
+    },
+    {
+      "id": "cps-service-weather-naver",
+      "label": "NAVER Weather Service",
+      "type": "cps",
+      "meta": {
+        "host": "141.124.124.124",
+        "location": "Naver Cloud Platform",
+        "information": "Weather service, which is provided by NAVER",
+        "sinkEdgeIDSet": {
+          "cps-service-connector01": true
+        },
+        "sourceEdgeIDSet": {}
+      }
+    },
+    {
+      "id": "cps-service-trafficlight-companya",
+      "label": "Traffic Light System by Company A",
+      "type": "cps",
+      "meta": {
+        "host": "32.132.123.123",
+        "location": "Daehak-ro 291",
+        "information": "Traffic light system provided by Company A",
+        "sinkEdgeIDSet": {
+          "cps-service-connector02": true
+        },
+        "sourceEdgeIDSet": {}
+      }
+    },
+    {
+      "id": "cps-service-whatever-service",
+      "label": "CPS service",
+      "type": "cps",
+      "meta": {
+        "host": "41.124.124.124",
+        "location": "Saejong-si",
+        "information": "Hello, World!",
+        "sinkEdgeIDSet": {
+          "cps-service-connector03": true
+        },
+        "sourceEdgeIDSet": {}
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "cps-service-manager-conn",
+      "from": "cps-service-manager",
+      "to": "cps-service-registry",
+      "type": "local",
+      "meta": {
+        "information": "Get service information (WSDL format)",
+        "dataType": "WSDL"
+      }
+    },
+    {
+      "id": "cps-arch-manager-conn",
+      "from": "arch-manager",
+      "to": "cps-service-manager",
+      "type": "local",
+      "meta": {
+        "information": "Get service information (WSDL format)",
+        "dataType": "WSDL"
+      }
+    },
+    {
+      "id": "cps-arch-manager-to-v2x-conn",
+      "from": "arch-manager",
+      "to": "v2x-business-logic-component",
+      "type": "local",
+      "meta": {
+        "information": "Configure architecture",
+        "dataType": "JSON-RPC"
+      }
+    },
+    {
+      "id": "cps-service-connector01",
+      "from": "v2x-business-logic-component",
+      "to": "cps-service-weather-naver",
+      "type": "http",
+      "meta": {
+        "information": "Get weather",
+        "dataType": "JSON-format1"
+      }
+    },
+    {
+      "id": "cps-service-connector02",
+      "from": "v2x-business-logic-component",
+      "to": "cps-service-trafficlight-companya",
+      "type": "http",
+      "meta": {
+        "information": "get traffic information",
+        "dataType": "JSON-format2"
+      }
+    },
+    {
+      "id": "cpcps-service-connector03",
+      "from": "v2x-business-logic-component",
+      "to": "cps-service-whatever-service",
+      "type": "http",
+      "meta": {
+        "information": "i don't know ",
+        "dataType": "JSON-format3"
+      }
+    }
+  ]
+}
