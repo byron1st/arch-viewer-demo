@@ -3,7 +3,7 @@ import * as path from 'path'
 import * as url from 'url'
 import * as http from 'http'
 import * as util from './util'
-import { NewGraphTransmitChannel } from '../IPCTypes'
+import { ErrorOccurredChannle, NewGraphTransmitChannel } from '../IPCTypes'
 import { ICommand } from 'godeptypes'
 import initGraph from './initGraph'
 
@@ -114,8 +114,8 @@ function handleStart() {
   canvasWindow.webContents.send(NewGraphTransmitChannel, initGraphData)
 }
 
-function handleError(arg: any) {
-
+function handleError(errorID: string) {
+  canvasWindow.webContents.send(ErrorOccurredChannle, errorID)
 }
 
 // Running scripts

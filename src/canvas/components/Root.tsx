@@ -8,6 +8,7 @@ import DataSet from '../DataSet'
 import Canvas from './canvas/Canvas'
 import InfoPanel from './infoPanel/InfoPanel'
 import SideBar from './sideBar/SideBar'
+import VisNetwork from '../VisNetwork'
 
 interface IRootProps {
   initSideBarData: (initSideBarState: State.ISideBarData) => any
@@ -25,6 +26,10 @@ class Root extends React.Component<IRootProps> {
         }
       }
     )
+
+    ipcRenderer.on(IPCType.ErrorOccurredChannle, (event: any, errorID: string) => {
+      VisNetwork.setErrorNode(errorID)
+    })
   }
 
   public render() {

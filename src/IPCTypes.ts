@@ -4,3 +4,4 @@ export const GetDepOfPkg = {
 }
 
 export const NewGraphTransmitChannel = 'new-graph-transmit-channel'
+export const ErrorOccurredChannle = 'error-occurred-channel'

@@ -122,6 +122,16 @@ class VisNetwork {
       )
     })
   }
+
+  public setErrorNode(errorID: string) {
+    const node = this.nodes.get(errorID)
+    if (node) {
+      node.shape = 'star'
+      // @ts-ignore 'font' exists in vis.Node
+      node.font = { color: 'red' }
+      this.nodes.update(node)
+    }
+  }
 }
 
 function styleEdge(edge: Graph.IEdge) {
