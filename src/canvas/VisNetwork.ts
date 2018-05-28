@@ -31,8 +31,9 @@ const NETWORK_OPTS: vis.Options = {
     }
   },
   layout: {
-    randomSeed: 1,
-    improvedLayout: true
+    // randomSeed: 1,
+    // improvedLayout: true
+    hierarchical: true
   },
   interaction: {
     multiselect: true,
