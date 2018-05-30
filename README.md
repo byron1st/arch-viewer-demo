@@ -231,7 +231,7 @@ A -(E1')-> B' -(E2)-> C
 
 프로젝트 루트 폴더에 `initGraph.json` 이름의 파일을 넣어주면 된다. `initGraph.json` 파일은 다음 구조를 갖는다.
 
-```json
+```typescript
 {
   nodes: INode[]
   edges: IEdge[]
