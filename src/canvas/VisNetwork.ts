@@ -5,7 +5,7 @@ import { remote } from 'electron'
 import DataSet from './DataSet'
 import Store from './Store'
 import { dataActions } from './Actions'
-import { EdgeType } from './enums'
+import { EdgeType, NodeType } from './enums'
 
 enum ElemType {
   node,
@@ -120,9 +120,9 @@ class VisNetwork {
   public setErrorNode(errorID: string) {
     const node = this.nodes.get(errorID)
     if (node) {
-      node.shape = 'star'
       // @ts-ignore 'font' exists in vis.Node
       node.font = { color: 'red' }
+      node.color = { background: 'red' }
       this.nodes.update(node)
     }
   }
@@ -151,7 +151,10 @@ function styleEdge(edge: Graph.IEdge) {
 }
 
 function styleNode(node: Graph.INode) {
-  node.group = node.type
+  node.color =
+    node.type === NodeType.CPS
+      ? { background: '#5CC9F5' }
+      : { background: '#A1A9B8' }
 
   return node
 }
