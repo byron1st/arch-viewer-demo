@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron'
+import { ipcRenderer, remote } from 'electron'
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { Graph, State } from 'godeptypes'
@@ -18,18 +18,17 @@ class Root extends React.Component<IRootProps> {
   constructor(props: IRootProps) {
     super(props)
 
-    ipcRenderer.on(
-      IPCType.NewGraphTransmitChannel,
-      (event: any, newGraph: Graph.IListGraph) => {
-        if (newGraph) {
-          this.props.initSideBarData(DataSet.init(newGraph))
-        }
-      }
-    )
-
     ipcRenderer.on(IPCType.ErrorOccurredChannle, (event: any, errorID: string) => {
       VisNetwork.setErrorNode(errorID)
     })
+  }
+
+  public componentDidMount() {
+    // @ts-ignore
+    const initGraph = remote.getCurrentWindow().initGraph
+    if (initGraph) {
+      this.props.initSideBarData(DataSet.init(initGraph))
+    }
   }
 
   public render() {

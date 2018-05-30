@@ -2,10 +2,10 @@ import { app, BrowserWindow, globalShortcut } from 'electron'
 import * as path from 'path'
 import * as url from 'url'
 import * as http from 'http'
+import * as fs from 'fs'
 import * as util from './util'
-import { ErrorOccurredChannle, NewGraphTransmitChannel } from '../IPCTypes'
-import { ICommand } from 'godeptypes'
-import initGraph from './initGraph'
+import { ErrorOccurredChannle } from '../IPCTypes'
+import { Graph, ICommand } from 'godeptypes'
 
 // Declare global variables
 const CanvasIndexUrl = url.format({
@@ -19,7 +19,7 @@ const port = '3030'
 let canvasWindow: Electron.BrowserWindow
 
 // Declare global functions
-function createCanvasWindow() {
+function createCanvasWindow(initGraph: Graph.IListGraph) {
   const windowOpts = {
     height: 800,
     width: 1200
@@ -41,6 +41,10 @@ function createCanvasWindow() {
   }
 
   canvasWindow.loadURL(CanvasIndexUrl)
+  if (initGraph) {
+    // @ts-ignore
+    canvasWindow.initGraph = initGraph
+  }
 
   // TODO: move to main menu
   // TODO: add dev flag
@@ -69,15 +73,9 @@ function initializeApp() {
         incomingData += data
       })
       request.on('end', () => {
-        // const newGraph = JSON.parse(incomingData)
-        // canvasWindow.webContents.send(NewGraphTransmitChannel, newGraph)
-
         const command: ICommand = JSON.parse(incomingData)
         if (command.cmd) {
           switch (command.cmd) {
-            case 'start':
-              handleStart()
-              break
             case 'error':
               handleError(command.arg)
               break
@@ -93,7 +91,8 @@ function initializeApp() {
     const server = http.createServer(requestHandler)
     server.listen(port)
 
-    createCanvasWindow()
+    const initGraph = JSON.parse(fs.readFileSync(path.join(__dirname, '../../initGraph.json')).toString())
+    createCanvasWindow(initGraph)
   })
 
   app.on('window-all-closed', () => {
@@ -104,14 +103,9 @@ function initializeApp() {
 
   app.on('activate', () => {
     if (canvasWindow === null) {
-      createCanvasWindow()
+      createCanvasWindow(null)
     }
   })
-}
-
-function handleStart() {
-  const initGraphData = initGraph
-  canvasWindow.webContents.send(NewGraphTransmitChannel, initGraphData)
 }
 
 function handleError(errorID: string) {
