@@ -40,7 +40,7 @@ const CanvasIndexUrl = url.format({
   slashes: true
 })
 
-const port = '3030' // <------------- 이 부분을 수정.
+const port = '3030' // <------------- 이 부분을 수정. (17 line)
 ...
 ```
 
@@ -225,6 +225,28 @@ A -(E1')-> B' -(E2)-> C
     }
   }
 }
+```
+
+### 초기 그래프 데이타
+
+프로젝트 루트 폴더에 `initGraph.json` 이름의 파일을 넣어주면 된다. `initGraph.json` 파일은 다음 구조를 갖는다.
+
+```json
+{
+  nodes: INode[]
+  edges: IEdge[]
+}
+```
+
+파일 이름을 수정하려면, `src/main/main.ts`의 다음 부분을 수정해주면 된다.
+
+```typescript
+    const server = http.createServer(requestHandler)
+    server.listen(port)
+
+    // <------------------ initGraph.json 파일 명을 수정하면 된다. (97 line)
+    const initGraph = JSON.parse(fs.readFileSync(path.join(__dirname, '../../initGraph.json')).toString())
+    createCanvasWindow(initGraph)
 ```
 
 # License
