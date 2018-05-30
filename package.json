@@ -1,18 +1,11 @@
 {
-  "name": "godepexplorer-ui",
-  "version": "0.0.1",
+  "name": "architecture-viewer",
+  "version": "1.0.0",
   "main": "dist/main/main.js",
   "scripts": {
     "start": "gulp && electron ."
   },
-  "build": {
-    "appId": "io.byron1st.godepexplorer",
-    "productName": "GoDepExplorer",
-    "directories": {
-      "output": "dist-app"
-    }
-  },
-  "author": "byron1st",
+  "author": "Hwi Ahn",
   "license": "MIT",
   "devDependencies": {
     "@types/lodash": "^4.14.108",
