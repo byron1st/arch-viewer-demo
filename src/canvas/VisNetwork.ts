@@ -134,7 +134,13 @@ class VisNetwork {
     this.nodes.remove(target.nodeIDs)
     this.edges.remove(target.edgeIDs)
 
-    this.nodes.update(alternatives.nodes.map(styleNode))
+    this.nodes.update(alternatives.nodes.map(node => {
+      // @ts-ignore 'font' exists in vis.Node
+      node.font = { color: 'blue' }
+      node.color = { background: 'blue' }
+
+      return node
+    }))
     this.edges.update(alternatives.edges.map(styleEdge))
   }
 }
