@@ -90,13 +90,7 @@ class VisNetwork {
       ? DataSet.getVisibleElements(_.concat(id, currentVisibleNodeIDList))
       : DataSet.getVisibleElements([id, ...currentVisibleNodeIDList])
 
-    this.nodes.update(
-      dataList.nodeList.map(node => {
-        node.group = node.type
-        return node
-      })
-    )
-
+    this.nodes.update(dataList.nodeList.map(styleNode))
     this.edges.update(dataList.edgeList.map(styleEdge))
   }
 
@@ -132,6 +126,17 @@ class VisNetwork {
       this.nodes.update(node)
     }
   }
+
+  public substitute(
+    target: { nodeIDs: string[]; edgeIDs: string[] },
+    alternatives: Graph.IListGraph
+  ) {
+    this.nodes.remove(target.nodeIDs)
+    this.edges.remove(target.edgeIDs)
+
+    this.nodes.update(alternatives.nodes.map(styleNode))
+    this.edges.update(alternatives.edges.map(styleEdge))
+  }
 }
 
 function styleEdge(edge: Graph.IEdge) {
@@ -143,6 +148,12 @@ function styleEdge(edge: Graph.IEdge) {
   }
 
   return edge
+}
+
+function styleNode(node: Graph.INode) {
+  node.group = node.type
+
+  return node
 }
 
 function getRelatedEdgeIDs(nodeID: string) {

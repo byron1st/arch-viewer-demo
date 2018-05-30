@@ -3,4 +3,5 @@ export const GetDepOfPkg = {
   Response: 'receive-expand-pkg-structure'
 }
 
-export const ErrorOccurredChannle = 'error-occurred-channel'
+export const ErrorOccurredChannel = 'error-occurred-channel'
+export const GraphSubstitutionChannel = 'graph-substitution-channel'

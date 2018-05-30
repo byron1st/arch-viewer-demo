@@ -1,6 +1,6 @@
 import { createAction } from 'typesafe-actions'
 import { getReturnOfExpression } from 'utility-types'
-import { State, Graph } from 'godeptypes'
+import { State, Graph, IAltCmdArg } from 'godeptypes'
 
 export const dataActions = {
   initSideBarData: createAction(
@@ -32,7 +32,11 @@ export const dataActions = {
       type: 'SHOW_INFO',
       payload: infoPanelData
     })
-  )
+  ),
+  substitute: createAction('SUBSTITUTE', (arg: IAltCmdArg) => ({
+    type: 'SUBSTITUTE',
+    payload: arg
+  }))
 }
 
 const returnsOfActions = Object.values(dataActions).map(getReturnOfExpression)

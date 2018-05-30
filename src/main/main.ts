@@ -4,7 +4,7 @@ import * as url from 'url'
 import * as http from 'http'
 import * as fs from 'fs'
 import * as util from './util'
-import { ErrorOccurredChannle } from '../IPCTypes'
+import { ErrorOccurredChannel, GraphSubstitutionChannel } from '../IPCTypes'
 import { Graph, ICommand } from 'godeptypes'
 
 // Declare global variables
@@ -77,7 +77,10 @@ function initializeApp() {
         if (command.cmd) {
           switch (command.cmd) {
             case 'error':
-              handleError(command.arg)
+              canvasWindow.webContents.send(ErrorOccurredChannel, command.arg)
+              break
+            case 'alt':
+              canvasWindow.webContents.send(GraphSubstitutionChannel, command.arg)
               break
             default:
               break
@@ -106,10 +109,6 @@ function initializeApp() {
       createCanvasWindow(null)
     }
   })
-}
-
-function handleError(errorID: string) {
-  canvasWindow.webContents.send(ErrorOccurredChannle, errorID)
 }
 
 // Running scripts

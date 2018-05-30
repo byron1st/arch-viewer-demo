@@ -1,4 +1,5 @@
 import { IGraphDataSet, Graph, State } from 'godeptypes'
+import * as _ from 'lodash'
 import { NodeType } from './enums'
 
 class DataSet {
@@ -56,6 +57,33 @@ class DataSet {
     )
 
     return { nodeList, edgeList }
+  }
+
+  public substitute(target: Graph.IListGraph, alternatives: Graph.IListGraph) {
+    const removedNodeIDs = new Set(target.nodes.map(node => node.id))
+    const removedEdgeIDs = new Set(target.edges.map(edge => edge.id))
+
+    const newNodeSet = _.omitBy(
+      this.dataSet.nodeSet,
+      (node: Graph.INode, id: string) => {
+        return removedNodeIDs.has(id)
+      }
+    )
+
+    alternatives.nodes.forEach(node => (newNodeSet[node.id] = node))
+
+    this.dataSet.nodeSet = newNodeSet
+
+    const newEdgeSet = _.omitBy(
+      this.dataSet.edgeSet,
+      (edge: Graph.IEdge, id: string) => {
+        return removedEdgeIDs.has(id)
+      }
+    )
+
+    alternatives.edges.forEach(edge => (newEdgeSet[edge.id] = edge))
+
+    this.dataSet.edgeSet = newEdgeSet
   }
 
   private sortByLabel(prev: string, next: string) {

@@ -45,6 +45,31 @@ export default (state = INITIAL_STATE, action: DataAction) => {
           )
         }
       }
+    case getType(dataActions.substitute):
+      const target = {
+        nodeIDs: action.payload.target.nodes.map(node => node.id),
+        edgeIDs: action.payload.target.edges.map(edge => edge.id)
+      }
+      const alternativesNodeIDs = action.payload.alternatives.nodes.map(
+        node => node.id
+      )
+
+      VisNetwork.substitute(target, action.payload.alternatives)
+
+      const newVisibleList = _.union(
+        _.difference(state.data.cps.visibleList, target.nodeIDs),
+        alternativesNodeIDs
+      )
+
+      return {
+        data: {
+          ...state.data,
+          cps: {
+            ...state.data.cps,
+            visibleList: newVisibleList
+          }
+        }
+      }
     default:
       return state
   }
@@ -70,16 +95,11 @@ function show(dataSet: State.ISideBarDataSet, id: string | string[]) {
 }
 
 function getVisibleList(dataSet: State.ISideBarData) {
-  return _.concat(
-    dataSet.cps.visibleList,
-    dataSet.comp.visibleList
-  )
+  return _.concat(dataSet.cps.visibleList, dataSet.comp.visibleList)
 }
 
 function sortByLabel(prev: string, next: string) {
-  if (
-    DataSet.getNode(prev).label <= DataSet.getNode(next).label
-  ) {
+  if (DataSet.getNode(prev).label <= DataSet.getNode(next).label) {
     return -1
   } else {
     return 1

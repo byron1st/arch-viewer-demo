@@ -94,6 +94,11 @@ declare module 'godeptypes' {
 
   export interface ICommand {
     cmd: string
-    arg: any
+    arg: string | IAltCmdArg
+  }
+
+  export interface IAltCmdArg {
+    target: Graph.IListGraph
+    alternatives: Graph.IListGraph
   }
 }
