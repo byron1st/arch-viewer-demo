@@ -13,6 +13,9 @@ import VisNetwork from '../VisNetwork'
 interface IRootProps {
   initSideBarData: (initSideBarState: State.ISideBarData) => any
   substitute: (arg: IAltCmdArg) => any
+  showInfo: (ids: State.ISelectedState) => any
+  select: (selected: State.ISelectedState) => any
+  deselect: (deselected: State.ISelectedState) => any
 }
 
 class Root extends React.Component<IRootProps> {
@@ -23,6 +26,9 @@ class Root extends React.Component<IRootProps> {
       IPCType.ErrorOccurredChannel,
       (event: any, errorID: string) => {
         VisNetwork.setErrorNode(errorID)
+        const selectedData = DataSet.selectNode(errorID)
+        this.props.showInfo(selectedData)
+        this.props.select(selectedData)
       }
     )
 
@@ -31,6 +37,18 @@ class Root extends React.Component<IRootProps> {
       (event: any, arg: IAltCmdArg) => {
         DataSet.substitute(arg.target, arg.alternatives)
         this.props.substitute(arg)
+
+        const selected = {
+          nodeList: arg.alternatives.nodes.map(node => node.id),
+          edgeList: arg.alternatives.edges.map(edge => edge.id)
+        }
+        const deselected = {
+          nodeList: arg.target.nodes.map(node => node.id),
+          edgeList: arg.target.edges.map(edge => edge.id)
+        }
+        this.props.showInfo(selected)
+        this.props.select(selected)
+        this.props.deselect(deselected)
       }
     )
   }
@@ -61,6 +79,15 @@ function mapDispatchToProps(dispatch: any) {
     },
     substitute: (arg: IAltCmdArg) => {
       dispatch(dataActions.substitute(arg))
+    },
+    showInfo: (ids: State.ISelectedState) => {
+      dispatch(dataActions.showInfo(ids))
+    },
+    select: (selected: State.ISelectedState) => {
+      dispatch(dataActions.select(selected))
+    },
+    deselect: (deselected: State.ISelectedState) => {
+      dispatch(dataActions.deselect(deselected))
     }
   }
 }
