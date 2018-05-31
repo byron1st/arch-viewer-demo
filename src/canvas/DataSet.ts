@@ -39,11 +39,13 @@ class DataSet {
   }
 
   public selectNode(id: string) {
-    return {
-      nodeList: [id],
-      edgeList: Object.values(this.dataSet.edgeSet)
-        .filter(edge => edge.from === id || edge.to === id)
-        .map(edge => edge.id)
+    if (this.getNode(id)) {
+      return {
+        nodeList: [id],
+        edgeList: Object.values(this.dataSet.edgeSet)
+          .filter(edge => edge.from === id || edge.to === id)
+          .map(edge => edge.id)
+      }
     }
   }
 

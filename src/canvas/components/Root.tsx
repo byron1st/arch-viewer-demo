@@ -27,8 +27,10 @@ class Root extends React.Component<IRootProps> {
       (event: any, errorID: string) => {
         VisNetwork.setErrorNode(errorID)
         const selectedData = DataSet.selectNode(errorID)
-        this.props.showInfo(selectedData)
-        this.props.select(selectedData)
+        if (selectedData) {
+          this.props.showInfo(selectedData)
+          this.props.select(selectedData)
+        }
       }
     )
 
