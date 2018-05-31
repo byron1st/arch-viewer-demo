@@ -158,7 +158,7 @@
       }
     },
     {
-      "id": "cpcps-service-connector03",
+      "id": "cps-service-connector03",
       "from": "v2x-business-logic-component",
       "to": "cps-service-whatever-service",
       "type": "http",
